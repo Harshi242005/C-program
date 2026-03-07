@@ -1,0 +1,64 @@
+// Helper function to split text by delimiters
+char** split_text(char* str, char delim, int* count) {
+    char** result = malloc(sizeof(char*));
+    int i = 0;
+    char* start = str;
+    char* end = str;
+    while (1) {
+        while (*end != delim && *end != '\0') end++;
+        int len = end - start;
+        result[i] = malloc(len + 1);
+        strncpy(result[i], start, len);
+        result[i][len] = '\0';
+        i++;
+        if (*end == '\0') break;
+        start = ++end;
+        result = realloc(result, (i + 1) * sizeof(char*));
+    }
+    *count = i;
+    return result;
+}
+
+struct document get_document(char* text) {
+    struct document doc;
+    int p_count;
+    char** p_strings = split_text(text, '\n', &p_count);
+    doc.paragraph_count = p_count;
+    doc.data = malloc(p_count * sizeof(struct paragraph));
+
+    for (int i = 0; i < p_count; i++) {
+        int s_count;
+        char** s_strings = split_text(p_strings[i], '.', &s_count);
+        // Remove empty string if paragraph ends with a period
+        if (s_count > 0 && strlen(s_strings[s_count - 1]) == 0) s_count--;
+
+        doc.data[i].sentence_count = s_count;
+        doc.data[i].data = malloc(s_count * sizeof(struct sentence));
+
+        for (int j = 0; j < s_count; j++) {
+            int w_count;
+            char** w_strings = split_text(s_strings[j], ' ', &w_count);
+            doc.data[i].data[j].word_count = w_count;
+            doc.data[i].data[j].data = malloc(w_count * sizeof(struct word));
+            for (int k = 0; k < w_count; k++) {
+                doc.data[i].data[j].data[k].data = w_strings[k];
+            }
+            free(w_strings);
+        }
+        free(s_strings);
+    }
+    free(p_strings);
+    return doc;
+}
+
+struct paragraph kth_paragraph(struct document doc, int k) {
+    return doc.data[k - 1];
+}
+
+struct sentence kth_sentence_in_mth_paragraph(struct document doc, int k, int m) {
+    return doc.data[m - 1].data[k - 1];
+}
+
+struct word kth_word_in_mth_sentence_of_nth_paragraph(struct document doc, int k, int m, int n) {
+    return doc.data[n - 1].data[m - 1].data[k - 1];
+}
