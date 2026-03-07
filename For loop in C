@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+int main() {
+    int a, b;
+    scanf("%d\n%d", &a, &b);
+
+    // Array to store English representations for indices 0-9
+    char *labels[] = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+
+    for (int i = a; i <= b; i++) {
+        if (i >= 1 && i <= 9) {
+            // Print the word from the array
+            printf("%s\n", labels[i]);
+        } else if (i > 9) {
+            // Check if the number is even or odd
+            if (i % 2 == 0) {
+                printf("even\n");
+            } else {
+                printf("odd\n");
+            }
+        }
+    }
+
+    return 0;
+}
