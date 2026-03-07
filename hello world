@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+int main() {
+    char s[100]; // Declare a variable to hold the input string
+    
+    // Read a full line of input from stdin
+    scanf("%[^\n]%*c", s);
+    
+    // Print "Hello, World!" on the first line
+    printf("Hello, World!\n");
+    
+    // Print the input string on the second line
+    printf("%s", s);
+    
+    return 0;
+}
